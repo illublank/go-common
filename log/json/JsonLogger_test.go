@@ -1,14 +1,15 @@
-package log_test
+package json_test
 
 import (
   "fmt"
   "testing"
 
   "github.com/illublank/go-common/log"
+  "github.com/illublank/go-common/log/json"
 )
 
 func TestJsonLogger(t *testing.T) {
-  logger := log.NewJsonLogger("testlogger")
+  var logger log.Logger = json.NewJsonLogger("testlogger")
   logger.SetLevel(log.Info)
 
   logger.Debug("debug", "haha")

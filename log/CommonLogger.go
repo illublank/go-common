@@ -25,7 +25,7 @@ func NewCommonLogger(name string) *CommonLogger {
   }
 }
 
-func (s *CommonLogger) SetLevel(level Level) *CommonLogger {
+func (s *CommonLogger) SetLevel(level Level) Logger {
   s.level = level
   return s
 }

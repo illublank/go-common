@@ -8,7 +8,7 @@ import (
 )
 
 func TestCommonLogger(t *testing.T) {
-  logger := log.NewCommonLogger("testlogger")
+  var logger log.Logger = log.NewCommonLogger("testlogger")
   logger.SetLevel(log.Info)
 
   logger.Debug("debug", "haha")
