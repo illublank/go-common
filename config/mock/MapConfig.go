@@ -19,7 +19,7 @@ func NewMapConfig(m collection.GoMap) *MapConfig {
   }
 }
 
-func (s *MapConfig) WithPrefix(p string) *MapConfig {
+func (s *MapConfig) WithPrefix(p string) config.Config {
 
   return &MapConfig{
     prefix: s.prefix + p,
@@ -27,7 +27,7 @@ func (s *MapConfig) WithPrefix(p string) *MapConfig {
   }
 }
 
-func (s *MapConfig) WithoutPrefix(p string) *MapConfig {
+func (s *MapConfig) WithoutPrefix(p string) config.Config {
   return &MapConfig{
     m: s.m.Filter(
       func(k string, v interface{}) bool { return strings.HasPrefix(k, p) },

@@ -46,14 +46,14 @@ func LoadAllWithoutPrefix(prefix string) *EnvConfig {
 }
 
 // WithPrefix todo
-func (s *EnvConfig) WithPrefix(p string) *EnvConfig {
+func (s *EnvConfig) WithPrefix(p string) config.Config {
   return &EnvConfig{
     prefix: s.prefix + p,
     m:      s.m,
   }
 }
 
-func (s *EnvConfig) WithoutPrefix(p string) *EnvConfig {
+func (s *EnvConfig) WithoutPrefix(p string) config.Config {
   return &EnvConfig{
     m: s.m.Filter(
       func(k string, v interface{}) bool { return strings.HasPrefix(k, p) },
