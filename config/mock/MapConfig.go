@@ -30,7 +30,7 @@ func (s *MapConfig) WithPrefix(p string) config.Config {
 func (s *MapConfig) WithoutPrefix(p string) config.Config {
   return &MapConfig{
     m: s.m.Filter(
-      func(k string, v interface{}) bool { return strings.HasPrefix(k, p) },
+      func(k string, v any) bool { return strings.HasPrefix(k, p) },
       func(k string) string { return strings.TrimPrefix(k, p) },
       nil,
     ),
@@ -38,7 +38,7 @@ func (s *MapConfig) WithoutPrefix(p string) config.Config {
 }
 
 // Get todo
-func (s *MapConfig) Get(name string) (interface{}, bool) {
+func (s *MapConfig) Get(name string) (any, bool) {
   return s.m.Get(name)
 }
 

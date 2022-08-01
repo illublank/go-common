@@ -9,7 +9,7 @@ import (
 
 func Test(t *testing.T) {
   tpl, _ := template.NewTemplateFormatter("aaaa{{.name}}")
-  params := map[string]interface{}{"name": "111"}
+  params := map[string]any{"name": "111"}
 
   fmt.Println(tpl.Format(params))
 }

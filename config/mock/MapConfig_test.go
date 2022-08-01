@@ -10,7 +10,7 @@ import (
 )
 
 func TestMock(t *testing.T) {
-  m := collection.GoMap(map[string]interface{}{
+  m := collection.GoMap(map[string]any{
     "abc_bcd_cde": 1,
     "bcd_cde":     "abc",
   })

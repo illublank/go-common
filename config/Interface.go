@@ -17,7 +17,7 @@ type Config interface {
   /*
      get and return config value and exists or not
   */
-  Get(string) (interface{}, bool)
+  Get(string) (any, bool)
 
   /*
      get and return config int value if exists, but default if not

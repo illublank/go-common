@@ -13,7 +13,7 @@ func (s *EmptyConfig) WithoutPrefix(p string) Config {
 }
 
 // Get todo
-func (s *EmptyConfig) Get(name string) (interface{}, bool) {
+func (s *EmptyConfig) Get(name string) (any, bool) {
   return nil, false
 }
 

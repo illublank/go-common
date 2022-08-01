@@ -61,8 +61,8 @@ func NewSimpleFormatter(formatStr string) *SimpleFormatter {
   }
 }
 
-func (s *SimpleFormatter) Format(params interface{}) string {
-  s.list.keyFragment.Replace(params.(map[string]interface{}))
+func (s *SimpleFormatter) Format(params any) string {
+  s.list.keyFragment.Replace(params.(map[string]any))
   result := s.list.String()
   s.list.keyFragment.Reset()
   return result

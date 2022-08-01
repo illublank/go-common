@@ -4,13 +4,13 @@ import (
   "encoding/json"
 )
 
-type GoMap map[string]interface{}
+type GoMap map[string]any
 
 func NewGoMap() GoMap {
-  return GoMap(map[string]interface{}{})
+  return GoMap(map[string]any{})
 }
 
-func (s GoMap) Get(key string) (interface{}, bool) {
+func (s GoMap) Get(key string) (any, bool) {
   val, exists := s[key]
   return val, exists
 }
@@ -57,7 +57,7 @@ func (s GoMap) GetMap(key string, def GoMap) GoMap {
   return def
 }
 
-func (s GoMap) Put(key string, val interface{}) GoMap {
+func (s GoMap) Put(key string, val any) GoMap {
   s[key] = val
   return s
 }
@@ -67,7 +67,7 @@ func (s GoMap) String() string {
   return string(bs)
 }
 
-func (s GoMap) Filter(filterFunc func(k string, v interface{}) bool, keyHandleFunc func(k string) string, valHandleFunc func(k interface{}) interface{}) GoMap {
+func (s GoMap) Filter(filterFunc func(k string, v any) bool, keyHandleFunc func(k string) string, valHandleFunc func(k any) any) GoMap {
   m := make(GoMap)
   for k, v := range s {
     if filterFunc(k, v) {

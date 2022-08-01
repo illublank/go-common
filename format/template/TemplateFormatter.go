@@ -26,7 +26,7 @@ func NewTemplateFormatter(formatStr string) (*TemplateFormatter, error) {
   }, nil
 }
 
-func (s *TemplateFormatter) Format(params interface{}) string {
+func (s *TemplateFormatter) Format(params any) string {
   buf := &bytes.Buffer{}
   err := s.tpl.Execute(buf, params)
   if err != nil {

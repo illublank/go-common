@@ -57,7 +57,7 @@ func (s KeyFragmentMap) Reset() {
   }
 }
 
-func (s KeyFragmentMap) Replace(m map[string]interface{}) {
+func (s KeyFragmentMap) Replace(m map[string]any) {
   for k, v := range s {
     if val, exists := m[k]; exists {
       v.Replace([]byte(fmt.Sprintf("%v", val)))

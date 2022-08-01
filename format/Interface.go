@@ -2,5 +2,5 @@ package format
 
 // Formatter todo
 type Formatter interface {
-  Format(interface{}) string
+  Format(any) string
 }

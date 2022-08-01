@@ -2,14 +2,14 @@ package log
 
 // Logger todo
 type Logger interface {
-  Debug(...interface{})
-  Debugf(string, ...interface{})
-  Warn(...interface{})
-  Warnf(string, ...interface{})
-  Info(...interface{})
-  Infof(string, ...interface{})
-  Error(...interface{})
-  Errorf(string, ...interface{})
+  Debug(...any)
+  Debugf(string, ...any)
+  Warn(...any)
+  Warnf(string, ...any)
+  Info(...any)
+  Infof(string, ...any)
+  Error(...any)
+  Errorf(string, ...any)
   SetLevel(Level) Logger
   // SetFormatter(Formatter) Logger
 }

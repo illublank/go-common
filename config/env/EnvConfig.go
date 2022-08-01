@@ -56,7 +56,7 @@ func (s *EnvConfig) WithPrefix(p string) config.Config {
 func (s *EnvConfig) WithoutPrefix(p string) config.Config {
   return &EnvConfig{
     m: s.m.Filter(
-      func(k string, v interface{}) bool { return strings.HasPrefix(k, p) },
+      func(k string, v any) bool { return strings.HasPrefix(k, p) },
       func(k string) string { return strings.TrimPrefix(k, p) },
       nil,
     ),
@@ -64,7 +64,7 @@ func (s *EnvConfig) WithoutPrefix(p string) config.Config {
 }
 
 // Get todo
-func (s *EnvConfig) Get(name string) (interface{}, bool) {
+func (s *EnvConfig) Get(name string) (any, bool) {
   return s.m.Get(name)
 }
 
