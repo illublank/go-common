@@ -1,3 +1,3 @@
 module github.com/illublank/go-common
 
-go 1.18
+go 1.19

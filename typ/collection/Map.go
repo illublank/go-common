@@ -1,7 +1,7 @@
 package collection
 
 import (
-  "encoding/json"
+	"encoding/json"
 )
 
 type GoMap map[string]any
@@ -81,4 +81,16 @@ func (s GoMap) Filter(filterFunc func(k string, v any) bool, keyHandleFunc func(
     }
   }
   return m
+}
+
+type GenericValueMap[T any] map[string]T
+
+func (s GenericValueMap[T]) Get(key string) (T, bool) {
+  v, exists := s[key]
+  return v, exists
+} 
+
+func GetVal[T any] (m map[string]any, key string) (T, bool) {
+  v, exists := m[key]
+  return v.(T), exists
 }
