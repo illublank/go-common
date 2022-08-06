@@ -5,10 +5,14 @@ import (
   "time"
 
   "github.com/illublank/go-common/format"
-  "github.com/illublank/go-common/format/simple"
+  "github.com/illublank/go-common/format/keyvalue"
+  "github.com/illublank/go-common/format/ordered"
+  "github.com/illublank/go-common/typ/ptr"
 )
 
-var CommonFormatter = simple.NewSimpleFormatter("${time} [${level}] ${name} : ${msg}")
+var CommonFormatter = keyvalue.NewKeyvalueFormatter("${time} [${level}] ${name} : ${msg}")
+
+var orderedFormatter = ordered.NewOrderedFormatter("{...}")
 
 type CommonLogger struct {
   Logger
@@ -31,12 +35,16 @@ func (s *CommonLogger) SetLevel(level Level) Logger {
 }
 
 func (s *CommonLogger) Log(level Level, fstr string, msg ...any) {
+  for i, m := range msg {
+    msg[i] = ptr.AntiPtr(m)
+  }
   var newMsg string
   if len(fstr) == 0 {
-    newMsg = fmt.Sprintln(msg...)
+    newMsg = orderedFormatter.Format(msg)
     newMsg = newMsg[:len(newMsg)-1]
   } else {
-    newMsg = fmt.Sprintf(fstr, msg...)
+    newMsg = ordered.NewOrderedFormatter(fstr).Format(msg)
+
   }
   fmt.Println(s.formatter.Format(map[string]any{"time": time.Now().Format("2006-01-02 15:04:05"), "level": fmt.Sprintf("%5s", level), "name": s.name, "msg": newMsg}))
 }

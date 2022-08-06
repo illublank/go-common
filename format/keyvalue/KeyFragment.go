@@ -1,31 +1,15 @@
-package simple
+package keyvalue
 
 import (
   "bytes"
   "fmt"
+  "io"
+
+  "github.com/illublank/go-common/format"
 )
 
-type Fragment interface {
-  Bytes() []byte
-}
-
-type NormalFragment struct {
-  Fragment
-  orignal []byte
-}
-
-func (s *NormalFragment) Bytes() []byte {
-  return s.orignal
-}
-
-func NewNormalFragment(orignal []byte) *NormalFragment {
-  return &NormalFragment{
-    orignal: orignal,
-  }
-}
-
 type KeyFragment struct {
-  Fragment
+  format.Fragment
   orignal []byte
   replace []byte
 }
@@ -67,14 +51,15 @@ func (s KeyFragmentMap) Replace(m map[string]any) {
 }
 
 type FragmentList struct {
-  list        []Fragment
+  io.WriterTo
+  list        []format.Fragment
   keyFragment KeyFragmentMap
 }
 
 func (s *FragmentList) AddNormal(bs []byte) {
   nbs := make([]byte, len(bs))
   copy(nbs, bs)
-  s.list = append(s.list, NewNormalFragment(nbs))
+  s.list = append(s.list, format.NewNormalFragment(nbs))
 }
 
 func (s *FragmentList) AddKey(bs []byte) {
@@ -103,9 +88,21 @@ func (s *FragmentList) String() string {
   return buf.String()
 }
 
+func (s *FragmentList) WriteTo(w io.Writer) (int64, error) {
+  n := int64(0)
+  for _, item := range s.list {
+    n0, err := w.Write(item.Bytes())
+    if err != nil {
+      return n + int64(n0), err
+    }
+    n += int64(n0)
+  }
+  return n, nil
+}
+
 func NewFragmentList() *FragmentList {
   return &FragmentList{
-    list:        []Fragment{},
+    list:        []format.Fragment{},
     keyFragment: map[string]*KeyFragment{},
   }
 }

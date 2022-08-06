@@ -1,17 +1,20 @@
-package simple_test
+package keyvalue_test
 
 import (
   "bytes"
   "fmt"
   "testing"
 
-  "github.com/illublank/go-common/format/simple"
+  "github.com/illublank/go-common/format/keyvalue"
 )
 
 func TestXxx(t *testing.T) {
-  formatter := simple.NewSimpleFormatter("abc${a${a}${a}}b}")
+  formatter := keyvalue.NewKeyvalueFormatter("abc${a${a}${a}}b}")
 
-  fmt.Println(formatter.Format(map[string]string{"a": "123"}))
+  buf := &bytes.Buffer{}
+  formatter.Params(map[string]any{"a": "123"}).WriteTo(buf)
+
+  fmt.Println(buf.String())
 }
 
 func TestBuf(t *testing.T) {

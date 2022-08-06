@@ -1,12 +1,13 @@
-package simple
+package keyvalue
 
 import (
   "bytes"
+  "io"
 
   "github.com/illublank/go-common/format"
 )
 
-type SimpleFormatter struct {
+type KeyvalueFormatter struct {
   format.Formatter
 
   formatStr string
@@ -14,7 +15,7 @@ type SimpleFormatter struct {
   list *FragmentList
 }
 
-func NewSimpleFormatter(formatStr string) *SimpleFormatter {
+func NewKeyvalueFormatter(formatStr string) *KeyvalueFormatter {
   fbs := []byte(formatStr)
 
   list := NewFragmentList()
@@ -55,15 +56,32 @@ func NewSimpleFormatter(formatStr string) *SimpleFormatter {
   if buf.Len() > 0 {
     list.AddNormal(buf.Bytes())
   }
-  return &SimpleFormatter{
+  return &KeyvalueFormatter{
     formatStr: formatStr,
     list:      list,
   }
 }
 
-func (s *SimpleFormatter) Format(params any) string {
+func (s *KeyvalueFormatter) Format(params any) string {
   s.list.keyFragment.Replace(params.(map[string]any))
   result := s.list.String()
   s.list.keyFragment.Reset()
   return result
+}
+
+func (s *KeyvalueFormatter) Params(params any) format.Formatter {
+  s.list.keyFragment.Replace(params.(map[string]any))
+  return s
+}
+
+func (s *KeyvalueFormatter) Reset() *KeyvalueFormatter {
+  s.list.keyFragment.Reset()
+  return s
+}
+
+// WriteTo(w Writer) (n int64, err error)
+func (s *KeyvalueFormatter) WriteTo(w io.Writer) (int64, error) {
+  n, err := s.list.WriteTo(w)
+  s.list.keyFragment.Reset()
+  return n, err
 }
