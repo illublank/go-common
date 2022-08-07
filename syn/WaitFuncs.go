@@ -11,6 +11,8 @@ type funcWrapper struct {
 }
 
 func (s *funcWrapper) newFuncRV(args []reflect.Value) []reflect.Value {
+  
+  s.wg.Add(1)
   ret := s.FuncRV.Call(args)
   // wrap key action
   s.wg.Done()
@@ -32,26 +34,33 @@ func WrapWaitGroup[T any](wg *sync.WaitGroup, f T) T {
 
 
 type WaitFuncs[T any] struct {
-  wg *sync.WaitGroup
-  funcs []reflect.Value
+  WG *sync.WaitGroup
+  funcRVs []reflect.Value
   Funcs []T
 }
 
 func NewWaitFuncs[T any]() *WaitFuncs[T] {
   ret := &WaitFuncs[T]{
-    wg: &sync.WaitGroup{},
-    funcs : []reflect.Value{},
+    WG: &sync.WaitGroup{},
+    funcRVs : []reflect.Value{},
+    Funcs: []T{},
   }
   return ret
 }
 
 func (s *WaitFuncs[T]) Add(f T) {
-  s.wg.Add(1)
-  newFuncRV := WrapWaitGroupRV(s.wg, reflect.ValueOf(f))
-  s.funcs = append(s.funcs, newFuncRV)
+  newFuncRV := WrapWaitGroupRV(s.WG, reflect.ValueOf(f))
+  s.funcRVs = append(s.funcRVs, newFuncRV)
   s.Funcs = append(s.Funcs, newFuncRV.Interface().(T))
 }
 
+func (s *WaitFuncs[T]) ForEach(handler func(T)) {
+  for _, f := range s.Funcs {
+    s.WG.Add(1)
+    handler(f)
+  }
+}
+
 func (s *WaitFuncs[T]) Wait() {
-  s.wg.Wait()
+  s.WG.Wait()
 }
