@@ -11,8 +11,6 @@ type funcWrapper struct {
 }
 
 func (s *funcWrapper) newFuncRV(args []reflect.Value) []reflect.Value {
-  
-  s.wg.Add(1)
   ret := s.FuncRV.Call(args)
   // wrap key action
   s.wg.Done()
