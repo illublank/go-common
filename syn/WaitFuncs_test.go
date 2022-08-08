@@ -2,7 +2,6 @@ package syn_test
 
 import (
   "fmt"
-  "sync"
   "testing"
   "time"
 
@@ -30,27 +29,20 @@ func double(a int) int {
   return ret
 }
 
-func TestWaitFuncs(t *testing.T) {
-  wg := &sync.WaitGroup{}
-  newAdd := syn.WrapWaitGroup(wg, add)
-  newDouble := syn.WrapWaitGroup(wg, double)
-  go newAdd(1, 9)
-
-  go newDouble(2)
-
-  wg.Wait()
-
-}
-
 func TestWaitFuncs2(t *testing.T) {
   wf := syn.NewWaitFuncs[func(int, int) int]()
 
   wf.Add(add)
   wf.Add(add2)
 
-  for _, item := range wf.Funcs {
-    go item(5, 5)
-  }
+  wf.ForEach(func(f func(int, int) int) {
+    f(3, 2)
+  })
 
-  wf.Wait()
+  wf2 := syn.NewWaitFuncs[func(int) int]()
+  wf2.Add(double)
+
+  wf2.ForEach(func(f func(int) int) {
+    f(3)
+  })
 }
