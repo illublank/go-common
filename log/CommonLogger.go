@@ -41,7 +41,6 @@ func (s *CommonLogger) Log(level Level, fstr string, msg ...any) {
   var newMsg string
   if len(fstr) == 0 {
     newMsg = orderedFormatter.Format(msg)
-    newMsg = newMsg[:len(newMsg)-1]
   } else {
     newMsg = ordered.NewOrderedFormatter(fstr).Format(msg)
 
